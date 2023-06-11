@@ -1,0 +1,63 @@
+##Logging to Discovery:
+ssh -Y <yourusername>@login.discovery.neu.edu
+
+##Copying training material to Discovery using 'scp':
+git clone <url>
+
+##Exercise 1:
+# During training:
+srun --partition=reservation --reservation=bootcamp_gpu_2022 --nodes=1 --cpus-per-task=4 --gres=gpu:1 --mem=10G --time=02:00:00 --pty /bin/bash
+
+# Outside of training:
+srun --partition=gpu --nodes=1 --cpus-per-task=4 --gres=gpu:1 --mem=10G --time=02:00:00 --pty /bin/bash
+
+# Steps for building environment in your $HOME directory:
+module list
+module load cuda/11.0
+module load anaconda3/2021.05
+conda create --name pytorch_env python=3.7 anaconda -y 
+
+## Exercise 1:
+# If not already loaded:
+module load cuda/11.0
+module load anaconda3/2021.05
+
+# Load the environment:
+source activate pytorch_env
+# or
+source activate /shared/centos7/anaconda3/2021.05/envs/pytorch_env_training
+
+# Install gpu-enabled PyTorch inside the virtual environment:
+conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -y
+
+# test if GPU device is detected with PyTorch:
+python -c'import torch; print(torch.cuda.is_available())’
+
+# deactivate conda environment
+conda deactivate
+
+## Exercise 5
+cd /scratch/<user_name>
+mkdir pytorch_imagenet
+cd pytorch_imagenet
+cp /work/bootcamp/ml_training/pytorch_imagenet/create_data.sh .
+cp /work/bootcamp/ml_training/pytorch_imagenet/main.py .
+python main.py --help
+python main.py --arch resnet18 --batch 1048 --pretrained --evaluate /work/bootcamp/ml_training/pytorch_imagenet/imagenet_untar/
+conda deactivate
+exit
+
+## Pycharm Installation
+srun --partition=short --nodes=1 --cpus-per-task=1 --mem=10G --time=00:30:00 --pty /bin/bash
+wget https://download-cdn.jetbrains.com/python/pycharm-community-2021.2.2.tar.gz
+tar -xzf pycharm-community-2021.2.2.tar.gz
+cd pycharm-community-2021.2.2/bin
+emacs ~/.bashrc
+export PYCHARM=/path-to-pycharm-tarball/pycharm-community-2021.2.2/bin/pycharm.sh
+$PYCHARM
+
+## Exercise_Plotly
+bash /shared/container_repository/plotly-ds/run_container_plotly.sh
+Singularity> source /opt/miniconda3/bin/activate
+(base) Singularity> python3 test_plotly_training.py
+(base) Singularity> jupyter notebook
