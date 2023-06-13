@@ -11,8 +11,10 @@
 #######################################
 
 #SBATCH --job-name=pycaret_build
-#SBATCH -N 1
-#SBATCH -c 2
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=10G
+#SBATCH --time=02:00:00
 
 # Loading the modules required
 module load anaconda3/2022.05 cuda/11.8
