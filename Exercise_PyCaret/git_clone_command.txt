@@ -1,1 +1,7 @@
+cd /scratch/$USER
+
+mkdir pycaret
+cd pycaret
+
+# From https://github.com/pycaret/examples
 git clone git@github.com:pycaret/examples.git
