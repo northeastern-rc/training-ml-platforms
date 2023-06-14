@@ -1,0 +1,9 @@
+cd /scratch/$USER
+
+mkdir RAPIDS
+cd RAPIDS
+
+mkdir cuml-23.06
+cd cuml-23.06
+
+git clone git@github.com:rapidsai/cuml.git
