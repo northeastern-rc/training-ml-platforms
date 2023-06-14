@@ -1,0 +1,62 @@
+##Logging to Discovery:
+ssh -Y <yourusername>@login.discovery.neu.edu
+
+##Copying training material to Discovery via SSH:
+cd /scratch/$USER
+git clone git@github.com:northeastern-rc/training-ml-platforms.git
+
+##For HTTPS, use:
+git clone https://github.com/northeastern-rc/training-ml-platforms.git
+
+##Exercise 5:
+# During training:
+srun --partition=reservation --reservation=bootcamp_gpu_2023 --nodes=1 --cpus-per-task=4 --gres=gpu:1 --mem=10G --time=02:00:00 --pty /bin/bash
+
+# Outside of training:
+srun --partition=gpu --nodes=1 --cpus-per-task=4 --gres=gpu:p100:1 --mem=10G --time=02:00:00 --pty /bin/bash
+
+# Steps for building PyTorch environment in your $HOME directory:
+module list
+module load anaconda3/2022.05 cuda/11.7
+conda create --name pytorch_env python=3.9 -y
+
+# Load the environment:
+source activate pytorch_env
+# Install gpu-enabled PyTorch inside the virtual environment:
+conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia -y
+
+# OR load an existing but older PyTorch environment
+module load anaconda3/2021.05 cuda/11.0
+source activate /shared/centos7/anaconda3/2021.05/envs/pytorch_env_training
+
+# test if GPU device is detected with PyTorch:
+python -c 'import torch; print(torch.cuda.is_available())'
+
+# deactivate conda environment
+conda deactivate
+
+## Run Imagenet
+cd /scratch/$USER
+mkdir pytorch_imagenet
+cd pytorch_imagenet
+cp /work/bootcamp/ml_training/pytorch_imagenet/create_data.sh .
+cp /work/bootcamp/ml_training/pytorch_imagenet/main.py .
+python main.py --help
+python main.py --arch resnet18 --batch 1048 --pretrained --evaluate /work/bootcamp/ml_training/pytorch_imagenet/imagenet_untar/
+conda deactivate
+exit
+
+## Pycharm Installation
+srun --partition=short --nodes=1 --cpus-per-task=1 --mem=10G --time=00:30:00 --pty /bin/bash
+wget https://download-cdn.jetbrains.com/python/pycharm-community-2021.2.2.tar.gz
+tar -xzf pycharm-community-2021.2.2.tar.gz
+cd pycharm-community-2021.2.2/bin
+emacs ~/.bashrc
+export PYCHARM=/path-to-pycharm-tarball/pycharm-community-2021.2.2/bin/pycharm.sh
+$PYCHARM
+
+## Exercise_Plotly
+bash /shared/container_repository/plotly-ds/run_container_plotly.sh
+Singularity> source /opt/miniconda3/bin/activate
+(base) Singularity> python3 test_plotly_training.py
+(base) Singularity> jupyter notebook

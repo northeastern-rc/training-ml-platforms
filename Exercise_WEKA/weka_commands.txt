@@ -1,0 +1,7 @@
+cd /scratch/$USER
+
+mkdir weka-demo
+
+cd weka-demo
+
+cp -r /shared/centos7/weka/weka-3-8-4/data .
