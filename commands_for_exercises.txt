@@ -36,7 +36,7 @@ python -c 'import torch; print(torch.cuda.is_available())'
 conda deactivate
 
 ## Run Imagenet
-cd /scratch/<user_name>
+cd /scratch/$USER
 mkdir pytorch_imagenet
 cd pytorch_imagenet
 cp /work/bootcamp/ml_training/pytorch_imagenet/create_data.sh .
